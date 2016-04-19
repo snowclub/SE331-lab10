@@ -1,5 +1,6 @@
 package camt.se331.shoppingcart.config.security;
 
+import camt.se331.shoppingcart.service.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,13 +38,13 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
         HttpServletRequest httpRequest = this.getAsHttpRequest(request);
 
         String authToken = this.extractAuthTokenFromRequest(httpRequest);
-        String userName = TokenUtils.getUserNameFromToken(authToken);
+        String userName = TokenUtil.getUserNameFromToken(authToken);
 
         if (userName != null) {
 
             UserDetails userDetails = this.userService.loadUserByUsername(userName);
 
-            if (TokenUtils.validateToken(authToken, userDetails)) {
+            if (TokenUtil.validateToken(authToken, userDetails)) {
 
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
